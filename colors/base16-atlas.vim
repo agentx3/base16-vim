@@ -19,10 +19,10 @@ let s:gui00        = "002635"
 let g:base16_gui00 = "002635"
 let s:gui01        = "00384d"
 let g:base16_gui01 = "00384d"
-let s:gui02        = "517F8D"
-let g:base16_gui02 = "517F8D"
-let s:gui03        = "6C8B91"
-let g:base16_gui03 = "6C8B91"
+let s:gui02        = "517f8d"
+let g:base16_gui02 = "517f8d"
+let s:gui03        = "6c8b91"
+let g:base16_gui03 = "6c8b91"
 let s:gui04        = "869696"
 let g:base16_gui04 = "869696"
 let s:gui05        = "a1a19a"
@@ -107,7 +107,7 @@ if has("nvim")
   let g:terminal_color_5 =  "#9a70a4"
   let g:terminal_color_6 =  "#14747e"
   let g:terminal_color_7 =  "#a1a19a"
-  let g:terminal_color_8 =  "#6C8B91"
+  let g:terminal_color_8 =  "#6c8b91"
   let g:terminal_color_9 =  "#ff5a67"
   let g:terminal_color_10 = "#7fc06e"
   let g:terminal_color_11 = "#ffcc1b"
@@ -131,7 +131,7 @@ elseif has("terminal")
         \ "#9a70a4",
         \ "#14747e",
         \ "#a1a19a",
-        \ "#6C8B91",
+        \ "#6c8b91",
         \ "#ff5a67",
         \ "#7fc06e",
         \ "#ffcc1b",
@@ -153,11 +153,22 @@ function! g:Base16hi(group, guifg, guibg, ctermfg, ctermbg, ...)
   let l:attr = get(a:, 1, "")
   let l:guisp = get(a:, 2, "")
 
+  " See :help highlight-guifg
+  let l:gui_special_names = ["NONE", "bg", "background", "fg", "foreground"]
+
   if a:guifg != ""
-    exec "hi " . a:group . " guifg=#" . a:guifg
+    if index(l:gui_special_names, a:guifg) >= 0
+      exec "hi " . a:group . " guifg=" . a:guifg
+    else
+      exec "hi " . a:group . " guifg=#" . a:guifg
+    endif
   endif
   if a:guibg != ""
-    exec "hi " . a:group . " guibg=#" . a:guibg
+    if index(l:gui_special_names, a:guibg) >= 0
+      exec "hi " . a:group . " guibg=" . a:guibg
+    else
+      exec "hi " . a:group . " guibg=#" . a:guibg
+    endif
   endif
   if a:ctermfg != ""
     exec "hi " . a:group . " ctermfg=" . a:ctermfg
@@ -169,7 +180,11 @@ function! g:Base16hi(group, guifg, guibg, ctermfg, ctermbg, ...)
     exec "hi " . a:group . " gui=" . l:attr . " cterm=" . l:attr
   endif
   if l:guisp != ""
-    exec "hi " . a:group . " guisp=#" . l:guisp
+    if index(l:gui_special_names, l:guisp) >= 0
+      exec "hi " . a:group . " guisp=" . l:guisp
+    else
+      exec "hi " . a:group . " guisp=#" . l:guisp
+    endif
   endif
 endfunction
 
@@ -331,6 +346,12 @@ call <sid>hi("jsGlobalObjects",     s:gui0A, "", s:cterm0A, "", "", "")
 call <sid>hi("jsGlobalNodeObjects", s:gui0A, "", s:cterm0A, "", "", "")
 call <sid>hi("jsExceptions",        s:gui0A, "", s:cterm0A, "", "", "")
 call <sid>hi("jsBuiltins",          s:gui0A, "", s:cterm0A, "", "", "")
+
+" LSP highlighting
+call <sid>hi("LspDiagnosticsDefaultError", s:gui08, "", s:cterm08, "", "", "")
+call <sid>hi("LspDiagnosticsDefaultWarning", s:gui09, "", s:cterm09, "", "", "")
+call <sid>hi("LspDiagnosticsDefaultHnformation", s:gui05, "", s:cterm05, "", "", "")
+call <sid>hi("LspDiagnosticsDefaultHint", s:gui03, "", s:cterm03, "", "", "")
 
 " Mail highlighting
 call <sid>hi("mailQuoted1",  s:gui0A, "", s:cterm0A, "", "", "")
